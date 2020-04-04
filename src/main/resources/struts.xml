@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.objectFactory" value="spring" />
+	
+	<package name= "account" namespace="/account" extends="json-default">
+		<action name="register">
+			<result>register/Register.html</result>
+		</action>		
+		<action name="login">
+			<result>login/Login.html</result>
+		</action>				
+	</package>
+	
+	<package name="default" extends="json-default">
+		<interceptors>
+			<interceptor name="log"
+				class="com.framework.controller.LoggingIntercept" />
+		</interceptors>
+
+	<!-- Home Page Mapping Begin -->	
+		<action name="">
+			<result>/account/login/Login.html</result>
+		</action>
+	<!-- Home Page Mapping End  -->
+	
+	<!-- Home Page Mapping Begin -->	
+		<action name="ControlPanel">
+			<result>/account/login/ControlPanel.jsp</result>
+		</action>
+	<!-- Home Page Mapping End  -->
+		
+	<!-- User Record Operation Begin -->	
+		<action name="loginAction" class="com.framework.controller.UserAction" method="Login">
+			<!-- default stack is mandatory when writing user defined interceptor -->
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
+			<result name="success">/account/login/success.jsp</result>
+			<result name="error">/account/login/error.jsp</result> 
+			<!--<result type="redirect" name="error">error.jsp</result>  --><!-- type = "redirect" to redirect -->
+		</action>
+		<action name="registerAction" class="com.framework.controller.UserAction" method="Register">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
+			<result name="success">/account/register/success.jsp</result>
+			<result name="error">/account/register/error.jsp</result> 
+		</action>
+		<action name="destroyAction" class="com.framework.controller.UserAction" method="Destroy">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
+			<!-- <result name="success" type="json"></result> -->
+			<result name="success">/account/destroy/success.jsp</result>
+			<result name="error">/account/destroy/error.jsp</result> 
+		</action>
+		<action name="updateAction" class="com.framework.controller.UserAction" method="Update">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
+			<result name="success">/account/update/success.jsp</result>
+			<result name="error">/account/update/error.jsp</result> 
+		</action>		
+		<action name="delCookie" class="com.framework.controller.UserAction" method="DelUserCookie">		
+			<result name="success">/account/login/Logout.html</result>
+		</action>	
+	<!-- User Record Operation End -->
+
+	<!-- Products Begin -->
+		<action name="checkProduct" class="com.framework.controller.ProductAction"
+			method="checkProduct">
+			<result name="success" type="json"></result>
+		</action>
+		<action name="checkCategory" class="com.framework.controller.ProductAction"
+			method="checkCategory">
+			<result name="Phone">/product/Phone.jsp</result>
+			<result name="Accessories">/product/Accessories.jsp</result>
+			<result name="error">/product/Phone.jsp</result>
+		</action>
+	<!-- Products End -->
+	
+	<!-- Shopping Cart Add Begin -->
+		<action name="add2Cart" class="com.framework.controller.Add2CartAction"
+			method="process">
+			<result name="success" type="json"></result>
+		</action>
+	<!-- Shopping Cart Add End -->
+
+		<action name="jsonTest"
+			class="com.framework.controller.JSONAction" method="execute">
+			<result name="success" type="json"></result>
+		</action>
+	</package>
+</struts>

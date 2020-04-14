@@ -3,8 +3,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
-<meta http-equiv="refresh" content="3; url=/account/login/Login.html">
+<title>Success</title>
+<meta http-equiv="refresh" content="1; url=/">
 </head>
 <body>
 	You successfully updated account

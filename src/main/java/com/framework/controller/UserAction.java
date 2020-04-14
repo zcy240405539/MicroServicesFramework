@@ -4,21 +4,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.*;
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.CookiesAware;
-import org.apache.struts2.interceptor.ServletResponseAware;
+import org.apache.struts2.interceptor.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 //import com.framework.business.UserBean;
 import com.opensymphony.xwork2.ActionSupport;
+import com.framework.business.CustomerSession;
 
-public class UserAction extends ActionSupport implements ServletResponseAware, CookiesAware {
+public class UserAction extends ActionSupport implements ServletRequestAware, ServletResponseAware, CookiesAware {
 	private static final long serialVersionUID = 1L;
 	// HTML source form beans
 	public String userid;
@@ -27,13 +24,15 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 	public String firstname;
 	public String lastname;
 	public String address;
+	public boolean checked;
+	public boolean isUserLoggedin=false;
 	private HttpServletResponse response;
 	private HttpServletRequest request;
 	// For handling cookies
 	Map<String, String> cookiesMap;
-
-	//@Autowired
-	//UserBean userBean;
+	
+	@Autowired
+	CustomerSession session;
 
 	public void setServletResponse(HttpServletResponse response) {
 		this.response = response;
@@ -45,15 +44,16 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 		this.response = response;
 	}
 	
+	@Override
 	public void setServletRequest(HttpServletRequest request) {
 		this.request = request;
 	}
 	public HttpServletRequest getRequest() {
 		return request;
 	}
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
-	}
+	//public void setRequest(HttpServletRequest request) {
+	//	this.request = request;
+	//}
 	
 	public Map<String, String> getCookiesMap() {
 		return cookiesMap;
@@ -110,15 +110,26 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
-	/*
-	 * public String registerStatus; public String getRegisterStatus() { return
-	 * registerStatus; } public void setRegisterStatus(String registerStatus) {
-	 * this.registerStatus = registerStatus; }
-	 */
 	
+	public boolean isChecked() {
+		return checked;
+	}
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+	public boolean isUserLoggedin() {
+		return isUserLoggedin;
+	}
+	public void setUserLoggedin(boolean isUserLoggedin) {
+		this.isUserLoggedin = isUserLoggedin;
+	}
+
 	public String DelUserCookie() {
-		System.out.println("start delete cookies");
+		//System.out.println("start delete cookies");
+		session.isCustomerLoggedin=false;
+		session.currentUser=null;
+		request.getSession().setAttribute("loggedin", false);
+		request.getSession().setAttribute("userid", null);
 		
 		Cookie useridCookie = new Cookie("userid", "");
 		useridCookie.setMaxAge(0);
@@ -150,49 +161,82 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 		if(beanResult.equals("success")) {
 			// set cookie
 			String currentUserid = this.userid;
-
 			
-			Cookie useridCookie = new Cookie("userid", currentUserid);
-			useridCookie.setMaxAge(60 * 60 * 24);
-			useridCookie.setPath("/");
-			response.addCookie(useridCookie);
+			this.isUserLoggedin = true;
+			session.isCustomerLoggedin=isUserLoggedin;
+			session.currentUser=currentUserid;
+			request.getSession().setAttribute("loggedin", isUserLoggedin);
+			request.getSession().setAttribute("userid", currentUserid);
+			request.getSession().setMaxInactiveInterval(60*10);
 			
-
-			//request.getSession().setAttribute("login", true);
-			//request.getSession().setAttribute("userid",currentUserid);
-			//request.getSession().setMaxInactiveInterval(1800);
-			
+			//System.out.println("user remember: "+checked);
+			if(this.checked==true) {
+				Cookie useridCookie = new Cookie("userid", currentUserid);
+				useridCookie.setMaxAge(60 * 60 * 24);
+				useridCookie.setPath("/");
+				response.addCookie(useridCookie);
+			}
 
 		}
 		
 		return beanResult;
 	}
 
+	public String UserSession() {
+		try {
+			this.isUserLoggedin = session.isCustomerLoggedin;
+			response = null;
+			request = null;
+		
+			if(isUserLoggedin==true) {
+				this.userid = session.currentUser;
+				return SUCCESS;
+			}else {
+				return ERROR;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ERROR;
+		}
+		
+	}
+	
 	public String Register() {
 		//String beanResult = userBean.Register(userid, pwd, username, address);
+		if(firstname.equals(null)||firstname.equals(""))
+			firstname="null";
+		if(lastname.equals(null)||lastname.equals(""))
+			lastname="null";
+		if(address.equals(null)||address.equals(""))
+			address="null";
 		RestTemplate getTest = new RestTemplate();
-		String beanResult = getTest.getForObject("http://localhost/registRest/"+userid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
+		String beanResult = getTest.getForObject("http://localhost:11111/registRest/"+userid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
 		// registerStatus = beanResult;
 		return beanResult;
 	}
 
 	public String Destroy() {
-		String currentUserid = getCookieValue("userid");
-		this.setUserid(currentUserid);
-		//String beanResult = userBean.Destroy(userid, pwd);
+		String currentUserid = session.currentUser;
 		RestTemplate getTest = new RestTemplate();
-		String beanResult = getTest.getForObject("http://localhost/destroyRest/"+userid+"/"+pwd, String.class);
+		String password = getTest.getForObject("http://localhost:11111/checkpwd/"+currentUserid, String.class);
+		String beanResult = getTest.getForObject("http://localhost:11111/destroyRest/"+currentUserid+"/"+password, String.class);
 		DelUserCookie();
+
 		return beanResult;
 	}
 
 	public String Update() {
-		//String currentUserid = cookiesMap.get("userid");
-		String currentUserid = getCookieValue("userid");
-		this.setUserid(currentUserid);
-		//String beanResult = userBean.Update(userid,currentpwd,pwd,username,address);
+		String currentUserid = session.currentUser;
 		RestTemplate getTest = new RestTemplate();
-		String beanResult = getTest.getForObject("http://localhost/updateRest/"+userid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
+		String password = getTest.getForObject("http://localhost:11111/checkpwd/"+currentUserid, String.class);
+		//System.out.println("curren user: "+currentUserid);
+		//System.out.println("getpassword: "+password);
+		//System.out.println("currentpassword: "+currentpwd);
+		String beanResult = "error";
+		if(password.equals(currentpwd)) {
+			beanResult = getTest.getForObject("http://localhost:11111/updateRest/"+currentUserid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
+			//System.out.println("result: "+beanResult);
+		}
 		return beanResult;
 	}
 
@@ -201,7 +245,7 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 		Cookie[] cookies = request.getCookies();
 		String result = null;
 		for (Cookie cookie : cookies) {
-			System.out.println("cookie: "+cookie.getName()+"="+cookie.getValue());
+			//System.out.println("cookie: "+cookie.getName()+"="+cookie.getValue());
 			if (cookie.getName().equals(str)) {
 				result = cookie.getValue();
 				break;
@@ -209,7 +253,25 @@ public class UserAction extends ActionSupport implements ServletResponseAware, C
 		}
 		return result;
 	}
-
-
+	
+	public String doesUserExist() {
+		String beanResult = "error";
+		try {
+			RestTemplate getTest = new RestTemplate();
+			beanResult = getTest.getForObject("http://localhost:11111/checkuser/"+userid, String.class);
+			
+			checked = true;
+			response = null;
+			request = null;
+		
+			return beanResult;
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		
+		
+	}
 
 }

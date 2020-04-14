@@ -8,13 +8,13 @@ $(document).ready(function() {
 function validateLogin(){
 	//var emailElement=$("#emailTextBox");
 	if(this.value==""){
-		$('#emailHelp').text('Please do not leave email blank!');
-		$('#emailHelp').show();
+		$('#emailHelpReg').text('Please do not leave email blank!');
+		$('#emailHelpReg').show();
 	}else if(this.value.indexOf("@") == -1){
-		$('#emailHelp').text('Please fill in a valid email address!');
-		$('#emailHelp').show();
+		$('#emailHelpReg').text('Please fill in a valid email address!');
+		$('#emailHelpReg').show();
 	}else{
-		$('#emailHelp').hide();
+		$('#emailHelpReg').hide();
 	}
 }
 
@@ -40,19 +40,25 @@ function validatePasswordReg(){
 
 
 function checkUser(){
+	//alert("triggered");
 	var checkUserAjaxObj={
 	        url: '/doesUserExist',
-	        type: 'post',
+	        type: 'get',
 	        data: {
-			   eid:$("#emailTextBoxReg").val()
+	        	userid:$("#emailTextBoxReg").val()
 			},
 	        context: this,
-		    success: function (data) {
-	        		if(data=="true")
-	        			alert("userid already taken");
+		    success: function (data) {  	
+	        		if(data.checked==true){
+	        			//alert("user id already taken");
+	        			$('#emailHelpReg').text('User ID already taken!');
+	        			$('#emailHelpReg').show();
+		    		}else
+		    			$('#emailHelpReg').hide();
 		        },
 	        error: function (data) {
 	        	console.log("failure");
+	        	alert(data.userid+" error");
 	        }
 	};
 	

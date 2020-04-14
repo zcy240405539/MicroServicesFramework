@@ -1,8 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="/struts-tags" prefix="s"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Welcome</title>
+	<title>Register</title>
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet"
@@ -13,7 +17,7 @@
     <link href="https://getbootstrap.com/docs/4.4/examples/cover/cover.css" rel="stylesheet">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="js/account/Register.js"></script>
+    <script src="/js/account/Register.js"></script>
 	
 	<style>
 	.bd-placeholder-img {
@@ -41,15 +45,16 @@
 			<div class="inner">
 				<h3 class="masthead-brand">Scott Zhao</h3>
 				<nav class="nav nav-masthead justify-content-center">
-					<a class="nav-link active"  style="border-bottom:.25rem solid #fff;"  href="/Welcome.html">Welcome</a> 
-					<a class="nav-link" href="/archive/index.html">Archive</a> 
-					<a class="nav-link" href="/About.html">About</a>
+					<a class="nav-link" href="/">Index</a> 
+					<a class="nav-link active"  style="border-bottom:.25rem solid #fff;"  href="/account/login">Account</a> 					
+					<a class="nav-link" href="/archive/index.html">Archive</a>
 				</nav>
 			</div>
 		</header>
 
 		<main role="main" class="inner cover">
-			<h1 class="cover-heading" id="pageTitle">Delete Account</h1>
+			<h1 class="cover-heading" id="pageTitle">Register</h1>
+			
 			<!--  
 			<p class="lead">
 				<a href="#" class="btn btn-lg btn-secondary">View More</a>
@@ -58,12 +63,27 @@
 				
 			<br>
 			
-			<div id="update">
-				<form action="destroyAction" method="post">		
+			<div id="register">
+				<form action="registerAction" method="post">				
+					<div class="form-group">
+						<label for="emailTextBoxReg">Email address</label> 
+							<input type="email" class="form-control" id="emailTextBoxReg" name="userid"> 
+							<small id="emailHelpReg" class="form-text text-danger" style="display:none;"></small>
+					</div>			
 					<div class="form-group">
 						<label for="passwordTextBoxReg">Password</label> 
 						<input type="password" class="form-control" id="passwordTextBoxReg" name="pwd">
 						<small id="passwordHelpReg" class="form-text text-danger" style="display:none;">Please do not leave password blank!</small>
+					</div>		
+					<div class="form-group">
+						<label for="usernameTextBoxReg">Your First Name</label> 
+							<input type="text" class="form-control" id="usernameTextBoxReg" name="firstname"> 
+						<label for="usernameTextBoxReg">Your Last Name</label> 
+							<input type="text" class="form-control" id="usernameTextBoxReg" name="lastname"> 
+					</div>	
+					<div class="form-group">
+						<label for="addressTextBoxReg">Your Address</label> 
+							<input type="text" class="form-control" id="addressTextBoxReg" name="address"> 
 					</div>							
 					<button type="submitReg" class="btn btn-success" style="margin:20px;">Submit</button>	
 					<a href="/account/login" class="btn btn-primary" style="margin:20px;">Login</a>
@@ -82,6 +102,16 @@
 		</footer>
 	</div>
 
+
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<!-- 
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	-->
+		
 	<script
 		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
 		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"

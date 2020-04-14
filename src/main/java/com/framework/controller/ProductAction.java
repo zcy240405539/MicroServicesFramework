@@ -2,21 +2,11 @@ package com.framework.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.CookiesAware;
-import org.apache.struts2.interceptor.ServletResponseAware;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.*;
+import javax.servlet.http.*;
 import org.springframework.web.client.RestTemplate;
+import com.framework.jpa.*;
 
-//import com.framework.business.UserBean;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class ProductAction extends ActionSupport{
@@ -32,6 +22,7 @@ public class ProductAction extends ActionSupport{
 	public String[] categories;
 	public String[] pictures;	
 	public String[] details;
+	List<ProductsEntityDTO> allProducts =new ArrayList<ProductsEntityDTO>();
 	private HttpServletResponse response;
 	private HttpServletRequest request;
 	
@@ -91,10 +82,25 @@ public class ProductAction extends ActionSupport{
 		this.detail = detail;
 	}
 	
+	public List<ProductsEntityDTO> getAllProducts() {
+		return allProducts;
+	}
+	public void setAllProducts(List<ProductsEntityDTO> allProducts) {
+		this.allProducts = allProducts;
+	}
+	
 	public String checkProduct() {
 		try {
 			RestTemplate getTest = new RestTemplate();
+			ProductsEntityDTO product = getTest.getForObject("http://localhost:22222/checkProduct/"+pid, ProductsEntityDTO.class);
 
+			pname=product.getPname();
+			price=product.getPrice();
+			category=product.getCategory();
+			picture=product.getPicture();	
+			detail=product.getDetail();	
+			
+			/*
 			String beanResultName = getTest.getForObject("http://localhost:22222/checkProductName/"+pid, String.class);
 			String beanResultPrice = getTest.getForObject("http://localhost:22222/checkProductPrice/"+pid, String.class);
 			String beanResultCategory = getTest.getForObject("http://localhost:22222/checkProductCategory/"+pid, String.class);
@@ -106,16 +112,39 @@ public class ProductAction extends ActionSupport{
 			category=beanResultCategory;
 			picture=beanPicture;	
 			detail=beanResultDetail;
+			*/
+			return "success";
 		}catch(Exception e) {
-			   e.printStackTrace();
+			e.printStackTrace();
+			return "error";
 		}
-		return SUCCESS;
+		//return SUCCESS;
 	}
 	
 	public String checkCategory() {
 		try {
 			RestTemplate getTest = new RestTemplate();
-			String beanResult=getTest.getForObject("http://localhost:22222/checkCategory/"+category, String.class);
+			ProductsEntityDTO[] products = getTest.getForObject("http://localhost:22222/category/"+category, ProductsEntityDTO[].class);
+			List<ProductsEntityDTO> beanResult = Arrays.asList(products);
+			this.allProducts=beanResult;
+			/*
+			pids=new String[beanResult.size()];
+			pnames=new String[beanResult.size()];
+			prices=new String[beanResult.size()];
+			categories=new String[beanResult.size()];
+			pictures=new String[beanResult.size()];
+			details=new String[beanResult.size()];
+			
+			for(int i=0; i<beanResult.size();i++) {
+				pids[i]=beanResult.get(i).getPid();
+				pnames[i]= beanResult.get(i).getPname();
+				prices[i] = beanResult.get(i).getPrice();
+				categories[i] = beanResult.get(i).getCategory();
+				pictures[i] = beanResult.get(i).getPicture();
+				details[i] = beanResult.get(i).getDetail();
+			}
+			
+			
 			pids=beanResult.split("\\|");
 			pnames=new String[pids.length];
 			prices=new String[pids.length];
@@ -123,33 +152,36 @@ public class ProductAction extends ActionSupport{
 			pictures=new String[pids.length];
 			details=new String[pids.length];
 			
+			
 			for(int i=0; i<pids.length;i++) {
 				pnames[i]= getTest.getForObject("http://localhost:22222/checkProductName/"+pids[i], String.class);
 				prices[i] = getTest.getForObject("http://localhost:22222/checkProductPrice/"+pids[i], String.class);
 				categories[i] = getTest.getForObject("http://localhost:22222/checkProductCategory/"+pids[i], String.class);
 				pictures[i] = getTest.getForObject("http://localhost:22222/checkProductPicture/"+pids[i], String.class);
 				details[i]= getTest.getForObject("http://localhost:22222/checkProductDetail/"+pids[i], String.class);
-				/*
+				
 				System.out.println(pids[i]);
 				System.out.println(pnames[i]);
 				System.out.println(prices[i]);
 				System.out.println(categories[i]);
 				System.out.println(pictures[i]);
 				System.out.println(details[i]);
-				*/
+				
 			}		
-			
+			*/	
+			if(category.equals("Phone")) {
+				return "Phone";
+		
+			}else if(category.equals("Accessories")) {
+				return "Accessories";
+			}else {
+				return "error";
+			}
 		}catch(Exception e) {
 			   e.printStackTrace();
+			   return "error";
 		}
-		if(category=="Phone") {
-			return "Phone";
-	
-		}else if(category=="Accessories") {
-			return "Accessories";
-		}else {
-			return "error";
-		}
+
 		//return SUCCESS;
 	}
 	

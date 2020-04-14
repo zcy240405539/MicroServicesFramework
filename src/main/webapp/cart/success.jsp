@@ -3,11 +3,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>success</title>
-<meta http-equiv="refresh" content="1; url=/account/login">
+<title>Success</title>
+<meta http-equiv="refresh" content="0; url=/shoppingCart">
 </head>
 <body>
-	You successfully deleted account
+	You successfully updated Cart
 
 	<br><br>
 	

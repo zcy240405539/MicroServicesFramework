@@ -6,7 +6,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Error</title>
-<meta http-equiv="refresh" content="3; url=/account/login/Login.html">
+<meta http-equiv="refresh" content="1; url=/account/update">
 </head>
 <body>
 

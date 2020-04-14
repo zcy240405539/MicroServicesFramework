@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib uri="/struts-tags" prefix="s"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="javax.servlet.http.Cookie"%>
 <html>
 <head>
@@ -44,27 +45,8 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Scott Zhao</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			data-target="#navbarsExample04" aria-controls="navbarsExample04"
-			aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
-		<div class="collapse navbar-collapse" id="navbarsExample04">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="/ControlPanel">Home
-						<span class="sr-only">(current)</span>
-				</a></li>
-				<li class="nav-item"><a class="nav-link" href="/checkCategory?category=Phone">Phone</a></li>
-				<li class="nav-item"><a class="nav-link" href="/checkCategory?category=Accessories">Accessories</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Shopping Cart</a></li>
-				<li class="nav-item"><a class="nav-link" href="/account/delCookie?">Logout</a></li>
-			</ul>
-
-		</div>
-	</nav>
+	<c:import url="/layouts/header.jsp" />
+	
 	<% 
 		Cookie[] cookies = request.getCookies();
 		String result = null;
@@ -82,10 +64,7 @@
 		<div class="jumbotron">
 			<div class="col-sm-8 mx-auto">
 				<h1>
-					WELCOME - This is control Panel
-					<s:property value="userid" />
-					<!-- <h1><% out.print(session.getAttribute("login")); %></h1> -->
-					<% out.print(result); %>
+					WELCOME - This is control Panel ${sessionScope.userid}
 				</h1>
 				<p>This example is a quick exercise to illustrate how the navbar
 					and its contents work.</p>

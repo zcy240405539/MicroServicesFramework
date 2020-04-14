@@ -6,10 +6,13 @@
 	
 	<package name= "account" namespace="/account" extends="json-default">
 		<action name="register">
-			<result>register/Register.html</result>
+			<result>register/Register.jsp</result>
 		</action>		
 		<action name="login">
-			<result>login/Login.html</result>
+			<result>login/Login.jsp</result>
+		</action>	
+		<action name="update">
+			<result>update/Update.jsp</result>
 		</action>				
 	</package>
 	
@@ -20,17 +23,22 @@
 		</interceptors>
 
 	<!-- Home Page Mapping Begin -->	
-		<action name="">
-			<result>/account/login/Login.html</result>
-		</action>
+		<action name="/" class="com.framework.controller.HomeAction" method="HomepageAction">
+			<result name="success">/Index.jsp</result>
+			<result name="error">/error/404page.jsp</result>
+		</action>	
+		<action name="" class="com.framework.controller.HomeAction" method="HomepageAction">
+			<result name="success">/Index.jsp</result>
+			<result name="error">/error/404page.jsp</result>
+		</action>	
+		<action name="header">
+			<result>/layouts/header.jsp</result>
+		</action>	
+		<action name="archive">
+			<result>/archive/index.html</result>
+		</action>	
 	<!-- Home Page Mapping End  -->
-	
-	<!-- Home Page Mapping Begin -->	
-		<action name="ControlPanel">
-			<result>/account/login/ControlPanel.jsp</result>
-		</action>
-	<!-- Home Page Mapping End  -->
-		
+
 	<!-- User Record Operation Begin -->	
 		<action name="loginAction" class="com.framework.controller.UserAction" method="Login">
 			<!-- default stack is mandatory when writing user defined interceptor -->
@@ -59,30 +67,64 @@
 			<result name="success">/account/update/success.jsp</result>
 			<result name="error">/account/update/error.jsp</result> 
 		</action>		
-		<action name="delCookie" class="com.framework.controller.UserAction" method="DelUserCookie">		
-			<result name="success">/account/login/Logout.html</result>
+		<action name="deleteUserSession" class="com.framework.controller.UserAction" method="DelUserCookie">		
+			<result name="success">/Index.jsp</result>
 		</action>	
+		<action name="getUserSession" class="com.framework.controller.UserAction" method="UserSession">
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+		</action>
+		<action name="doesUserExist" class="com.framework.controller.UserAction" method="doesUserExist">
+			<result name="success" type="json"></result>
+			<result name="error" type="json"></result>
+		</action>
+		
 	<!-- User Record Operation End -->
 
 	<!-- Products Begin -->
-		<action name="checkProduct" class="com.framework.controller.ProductAction"
-			method="checkProduct">
-			<result name="success" type="json"></result>
+		<action name="checkProduct" class="com.framework.controller.ProductAction" method="checkProduct">
+			<result name="success">/product/Details.jsp</result>
+			<result name="error">/error/404page.jsp</result>
+			<!-- <result name="success" type="json"></result> -->
 		</action>
-		<action name="checkCategory" class="com.framework.controller.ProductAction"
-			method="checkCategory">
+		<action name="checkCategory" class="com.framework.controller.ProductAction" method="checkCategory">	
 			<result name="Phone">/product/Phone.jsp</result>
 			<result name="Accessories">/product/Accessories.jsp</result>
-			<result name="error">/product/Phone.jsp</result>
+			<result name="error">/error/404page.jsp</result>
 		</action>
 	<!-- Products End -->
 	
-	<!-- Shopping Cart Add Begin -->
-		<action name="add2Cart" class="com.framework.controller.Add2CartAction"
-			method="process">
-			<result name="success" type="json"></result>
+	<!-- Shopping Cart Begin -->
+		<action name="addItem" class="com.framework.controller.ShopAction" method="Add">
+			<result name="success">/cart/AddCart.jsp</result>
 		</action>
-	<!-- Shopping Cart Add End -->
+		<action name="updateItem" class="com.framework.controller.ShopAction" method="Update">
+			<result name="success">/cart/Update.jsp</result>
+		</action>
+		<action name="destroyItem" class="com.framework.controller.ShopAction" method="Destroy">
+			<result name="success">/cart/success.jsp</result>
+		</action>
+		<action name="shoppingCart" class="com.framework.controller.ShopAction" method="shoppingCart">
+			<result name="success">/cart/ShoppingCart.jsp</result>
+		</action>
+	<!-- Shopping Cart End -->
+	
+	<!-- Shopping Cart Begin -->
+		<action name="userOrder" class="com.framework.controller.OrderAction" method="UserOrder" >
+			<result name="success">/order/UserOrder.jsp</result>
+			<result name="error">/order/NoOrder.jsp</result>
+		</action>	
+	<!-- Shopping Cart End -->
+	
+	<!-- Check Out Begin -->
+		<action name="bill" class="com.framework.controller.OrderAction" method="Bill" >
+			<result name="success">/checkout/Bill.jsp</result>
+		</action>
+		<action name="checkout" class="com.framework.controller.OrderAction" method="CheckOut" >
+			<result name="success">/checkout/success.jsp</result>
+			<result name="error">/checkout/error.jsp</result>
+		</action>	
+	<!-- Check Out End -->
 
 		<action name="jsonTest"
 			class="com.framework.controller.JSONAction" method="execute">

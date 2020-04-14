@@ -1,127 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="/struts-tags" prefix="s"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="javax.servlet.http.Cookie"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Accessories</title>
-<!-- Bootstrap core CSS -->
-<link
-	href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-	crossorigin="anonymous">
+	<link href="https://getbootstrap.com/docs/4.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Scott Zhao</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-			data-target="#navbarsExample04" aria-controls="navbarsExample04"
-			aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-
-		<div class="collapse navbar-collapse" id="navbarsExample04">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link"
-					href="/ControlPanel">Home <span class="sr-only">(current)</span>
-				</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/checkCategory?category=Phone">Phone</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/checkCategory?category=Accessories">Accessories</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Shopping
-						Cart</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="/account/delCookie?">Logout</a></li>
-			</ul>
-
-		</div>
-	</nav>
+	<jsp:include page="/layouts/header.jsp" flush="true" />
 
 	<main role="main">
-	<div class="col-md-12 mx-auto">
-	<br>
+		<br><br>
+		<div class="container">
+			<div class="card-deck">
+				<s:iterator value="allProducts" status="all">
+					<div class="card">
+						<img class="card-img-top" style="height:100%;width:100%;" src="${picture}" alt="Card image cap">
+						<div class="card-body">
+							<h5 class="card-title">${pname}</h5>
+							<p class="card-text">$${price}</p>
+						</div>
+						<a class="btn btn-info" href="/checkProduct?pid=${pid}">Order</a>
+					</div>
+				</s:iterator>
+			</div>
+			<br>
+			
+		<!-- 
 		<div class="card-deck">
-
 			<div class="card">
 				<img class="card-img-top" src="<s:property value="pictures[0]" />"
 					alt="Card image cap">
 				<div class="card-body">
 					<h5 class="card-title">
 						<s:property value="pnames[0]" />
-						&nbsp$<s:property value="prices[0]" />
 					</h5>
 					<p class="card-text">
-						<s:property value="details[0]" />
-					</p>
-					<p class="card-text">
-						<s:property value="category[0]" />
-						</small>
+						<s:property value="prices[0]" />
 					</p>
 				</div>
+				<a class="btn btn-primary" href="/checkProduct?pid=<%= request.getAttribute("pids[0]") %>" >Details</a>
 			</div>
-
-			<div class="card">
-				<img class="card-img-top" src="<s:property value="pictures[1]" />"
-					alt="Card image cap">
-				<div class="card-body">
-					<h5 class="card-title">
-						<s:property value="pnames[1]" />
-						&nbsp$<s:property value="prices[1]" />
-					</h5>
-					<p class="card-text">
-						<s:property value="details[1]" />
-					</p>
-					<p class="card-text">
-						<s:property value="category[1]" />
-						</small>
-					</p>
-				</div>
-			</div>
-
-			<div class="card">
-				<img class="card-img-top" src="<s:property value="pictures[2]" />"
-					alt="Card image cap">
-				<div class="card-body">
-					<h5 class="card-title">
-						<s:property value="pnames[2]" />
-						&nbsp$<s:property value="prices[2]" />
-					</h5>
-					<p class="card-text">
-						<s:property value="details[2]" />
-					</p>
-					<p class="card-text">
-						<s:property value="category[2]" />
-						</small>
-					</p>
-				</div>
-			</div>
-
-			<div class="card">
-				<img class="card-img-top" src="<s:property value="pictures[3]" />"
-					alt="Card image cap">
-				<div class="card-body">
-					<h5 class="card-title">
-						<s:property value="pnames[3]" />
-						&nbsp$<s:property value="prices[3]" />
-					</h5>
-					<p class="card-text">
-						<s:property value="details[3]" />
-					</p>
-					<p class="card-text">
-						<s:property value="category[3]" />
-						</small>
-					</p>
-				</div>
-			</div>
-
 		</div>
-		<br>
-	</div>
+		-->	
+			
+		</div>
 	</main>
 </body>
 </html>

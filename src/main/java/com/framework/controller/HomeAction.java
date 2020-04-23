@@ -47,17 +47,27 @@ public class HomeAction extends ActionSupport implements ServletRequestAware, Se
 	}
 	
 	public String HomepageAction() {
-		session.isCustomerLoggedin=false;
+		//session.isCustomerLoggedin=false;
 		Cookie[] cookies = request.getCookies();
 		try {
+			if(cookies!=null) {
 			for(Cookie cookie:cookies) {
 				System.out.println(cookie.getName()+": "+cookie.getValue());
 				if(cookie.getName().equals("userid")) {
 					session.isCustomerLoggedin=true;
+					session.currentUser = cookie.getValue();
 					request.getSession().setAttribute("loggedin", true);
 					request.getSession().setAttribute("userid", cookie.getValue());
 				}
 			}
+			}else {
+				request.getSession().setAttribute("loggedin", false);
+				request.getSession().setAttribute("userid", null);
+			}			
+			
+			session.ipAddress = IpUtil.getIpAddr(request);
+			System.out.println("IP Addres: "+session.ipAddress);
+			
 			return SUCCESS;
 		}catch(Exception e) {
 			e.printStackTrace();

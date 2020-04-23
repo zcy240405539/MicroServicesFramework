@@ -30,9 +30,11 @@
 						<div class="col-sm-4">
 							<h4>Shopping Cart</h4>
 						</div>
+						<!-- 
 						<div class="col-sm-8">
 							<h4 style="float:right;">Price</h4>
 						</div>
+						-->
 				</div>
 				<s:iterator value="allItems" status="all">
 					<li class="list-group-item">
@@ -44,12 +46,11 @@
 							<h2>${prodName}</h2>
 							<br>
 							<h5>Quantity: ${prodCount}</h5>
-							<br>
 							<h5>Unit Price: $${prodPrice}</h5>
 						</div>
 						
 						<div class="col-sm-2">
-							<h4 id="totalPriceBox" style="color:#ff0000;">$${totalPrice}</h4>							
+							<h4 id="totalPriceBox" style="color:#ff0000;padding-bottom: 10px;"><a style="color:#000000;">Price: </a>$${totalPrice}</h4>							
 							<a class="btn btn-danger btn-sm" href="destroyItem?prodID=${prodID}" role="button">Delete</a>					
 							<br><br>
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#itemModal">Change Quantity</button>

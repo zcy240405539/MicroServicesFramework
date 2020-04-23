@@ -4,7 +4,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.*;
 import javax.servlet.http.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
+
+import com.framework.business.CustomerSession;
 import com.framework.jpa.*;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -25,6 +29,8 @@ public class ProductAction extends ActionSupport{
 	List<ProductsEntityDTO> allProducts =new ArrayList<ProductsEntityDTO>();
 	private HttpServletResponse response;
 	private HttpServletRequest request;
+	@Autowired
+	CustomerSession session;
 	
 	public void setServletResponse(HttpServletResponse response) {
 		this.response = response;
@@ -92,7 +98,7 @@ public class ProductAction extends ActionSupport{
 	public String checkProduct() {
 		try {
 			RestTemplate getTest = new RestTemplate();
-			ProductsEntityDTO product = getTest.getForObject("http://localhost:22222/checkProduct/"+pid, ProductsEntityDTO.class);
+			ProductsEntityDTO product = getTest.getForObject("http://"+session.IP+":22222/checkProduct/"+pid, ProductsEntityDTO.class);
 
 			pname=product.getPname();
 			price=product.getPrice();
@@ -124,51 +130,10 @@ public class ProductAction extends ActionSupport{
 	public String checkCategory() {
 		try {
 			RestTemplate getTest = new RestTemplate();
-			ProductsEntityDTO[] products = getTest.getForObject("http://localhost:22222/category/"+category, ProductsEntityDTO[].class);
+			ProductsEntityDTO[] products = getTest.getForObject("http://"+session.IP+":22222/category/"+category, ProductsEntityDTO[].class);
 			List<ProductsEntityDTO> beanResult = Arrays.asList(products);
 			this.allProducts=beanResult;
-			/*
-			pids=new String[beanResult.size()];
-			pnames=new String[beanResult.size()];
-			prices=new String[beanResult.size()];
-			categories=new String[beanResult.size()];
-			pictures=new String[beanResult.size()];
-			details=new String[beanResult.size()];
-			
-			for(int i=0; i<beanResult.size();i++) {
-				pids[i]=beanResult.get(i).getPid();
-				pnames[i]= beanResult.get(i).getPname();
-				prices[i] = beanResult.get(i).getPrice();
-				categories[i] = beanResult.get(i).getCategory();
-				pictures[i] = beanResult.get(i).getPicture();
-				details[i] = beanResult.get(i).getDetail();
-			}
-			
-			
-			pids=beanResult.split("\\|");
-			pnames=new String[pids.length];
-			prices=new String[pids.length];
-			categories=new String[pids.length];
-			pictures=new String[pids.length];
-			details=new String[pids.length];
-			
-			
-			for(int i=0; i<pids.length;i++) {
-				pnames[i]= getTest.getForObject("http://localhost:22222/checkProductName/"+pids[i], String.class);
-				prices[i] = getTest.getForObject("http://localhost:22222/checkProductPrice/"+pids[i], String.class);
-				categories[i] = getTest.getForObject("http://localhost:22222/checkProductCategory/"+pids[i], String.class);
-				pictures[i] = getTest.getForObject("http://localhost:22222/checkProductPicture/"+pids[i], String.class);
-				details[i]= getTest.getForObject("http://localhost:22222/checkProductDetail/"+pids[i], String.class);
-				
-				System.out.println(pids[i]);
-				System.out.println(pnames[i]);
-				System.out.println(prices[i]);
-				System.out.println(categories[i]);
-				System.out.println(pictures[i]);
-				System.out.println(details[i]);
-				
-			}		
-			*/	
+
 			if(category.equals("Phone")) {
 				return "Phone";
 		

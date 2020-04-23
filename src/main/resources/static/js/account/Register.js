@@ -49,12 +49,17 @@ function checkUser(){
 			},
 	        context: this,
 		    success: function (data) {  	
-	        		if(data.checked==true){
+	        		if(data.userchecked==true){
 	        			//alert("user id already taken");
 	        			$('#emailHelpReg').text('User ID already taken!');
+	        			$('#emailHelpReg2').hide();
 	        			$('#emailHelpReg').show();
-		    		}else
+		    		}else{
+		    			$('#emailHelpReg2').text('User ID is available!');
 		    			$('#emailHelpReg').hide();
+		    			$('#emailHelpReg2').show();
+		    			
+		    		}
 		        },
 	        error: function (data) {
 	        	console.log("failure");

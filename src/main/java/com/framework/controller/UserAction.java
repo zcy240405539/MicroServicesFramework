@@ -3,19 +3,17 @@ package com.framework.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 
 import java.util.Map;
-
 import javax.servlet.http.*;
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
-
-//import com.framework.business.UserBean;
 import com.opensymphony.xwork2.ActionSupport;
 import com.framework.business.CustomerSession;
 
 public class UserAction extends ActionSupport implements ServletRequestAware, ServletResponseAware, CookiesAware {
+	private static Logger logger = Logger.getLogger(UserAction.class);  
 	private static final long serialVersionUID = 1L;
 	// HTML source form beans
 	public String userid;
@@ -25,6 +23,7 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	public String lastname;
 	public String address;
 	public boolean checked;
+	public boolean userchecked;
 	public boolean isUserLoggedin=false;
 	private HttpServletResponse response;
 	private HttpServletRequest request;
@@ -117,6 +116,13 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	public void setChecked(boolean checked) {
 		this.checked = checked;
 	}
+	
+	public boolean isUserchecked() {
+		return userchecked;
+	}
+	public void setUserchecked(boolean userchecked) {
+		this.userchecked = userchecked;
+	}
 	public boolean isUserLoggedin() {
 		return isUserLoggedin;
 	}
@@ -156,18 +162,21 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	public String Login() {
 		RestTemplate getTest = new RestTemplate();
 		//String beanResult = userBean.Auth(userid, pwd);
-		String beanResult = getTest.getForObject("http://localhost:11111/authRest/"+userid+"/"+pwd, String.class);
+		String beanResult = getTest.getForObject("http://"+session.IP+":11111/authRest/"+userid+"/"+pwd, String.class);
 		
 		if(beanResult.equals("success")) {
 			// set cookie
 			String currentUserid = this.userid;
 			
 			this.isUserLoggedin = true;
-			session.isCustomerLoggedin=isUserLoggedin;
+			session.isCustomerLoggedin=true;
 			session.currentUser=currentUserid;
 			request.getSession().setAttribute("loggedin", isUserLoggedin);
 			request.getSession().setAttribute("userid", currentUserid);
 			request.getSession().setMaxInactiveInterval(60*10);
+			
+			//System.out.println("Logged in: "+session.isCustomerLoggedin);
+			//System.out.println("USER ID: "+session.currentUser);
 			
 			//System.out.println("user remember: "+checked);
 			if(this.checked==true) {
@@ -176,6 +185,8 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 				useridCookie.setPath("/");
 				response.addCookie(useridCookie);
 			}
+			
+			logger.info(this.userid +" had logged in");  
 
 		}
 		
@@ -210,7 +221,7 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 		if(address.equals(null)||address.equals(""))
 			address="null";
 		RestTemplate getTest = new RestTemplate();
-		String beanResult = getTest.getForObject("http://localhost:11111/registRest/"+userid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
+		String beanResult = getTest.getForObject("http://"+session.IP+":11111/registRest/"+userid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
 		// registerStatus = beanResult;
 		return beanResult;
 	}
@@ -218,8 +229,8 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	public String Destroy() {
 		String currentUserid = session.currentUser;
 		RestTemplate getTest = new RestTemplate();
-		String password = getTest.getForObject("http://localhost:11111/checkpwd/"+currentUserid, String.class);
-		String beanResult = getTest.getForObject("http://localhost:11111/destroyRest/"+currentUserid+"/"+password, String.class);
+		String password = getTest.getForObject("http://"+session.IP+":11111/checkpwd/"+currentUserid, String.class);
+		String beanResult = getTest.getForObject("http://"+session.IP+":11111/destroyRest/"+currentUserid+"/"+password, String.class);
 		DelUserCookie();
 
 		return beanResult;
@@ -228,13 +239,13 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	public String Update() {
 		String currentUserid = session.currentUser;
 		RestTemplate getTest = new RestTemplate();
-		String password = getTest.getForObject("http://localhost:11111/checkpwd/"+currentUserid, String.class);
+		String password = getTest.getForObject("http://"+session.IP+":11111/checkpwd/"+currentUserid, String.class);
 		//System.out.println("curren user: "+currentUserid);
 		//System.out.println("getpassword: "+password);
 		//System.out.println("currentpassword: "+currentpwd);
 		String beanResult = "error";
 		if(password.equals(currentpwd)) {
-			beanResult = getTest.getForObject("http://localhost:11111/updateRest/"+currentUserid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
+			beanResult = getTest.getForObject("http://"+session.IP+":11111/updateRest/"+currentUserid+"/"+pwd+"/"+firstname+"/"+lastname+"/"+address, String.class);
 			//System.out.println("result: "+beanResult);
 		}
 		return beanResult;
@@ -256,13 +267,19 @@ public class UserAction extends ActionSupport implements ServletRequestAware, Se
 	
 	public String doesUserExist() {
 		String beanResult = "error";
+		checked = false;
+		response = null;
+		request = null;
+
 		try {
 			RestTemplate getTest = new RestTemplate();
-			beanResult = getTest.getForObject("http://localhost:11111/checkuser/"+userid, String.class);
+			beanResult = getTest.getForObject("http://"+session.IP+":11111/checkuser/"+userid, String.class);
 			
-			checked = true;
-			response = null;
-			request = null;
+			if(beanResult.equals("success")) {
+				userchecked = true;	
+			}else {
+				userchecked = false;	
+			}
 		
 			return beanResult;
 		

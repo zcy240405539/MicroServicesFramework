@@ -12,6 +12,9 @@
 	rel="stylesheet"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
 	crossorigin="anonymous">
+	<link
+	href="https://getbootstrap.com/docs/4.3/scss/utilities/flex.scss"
+	rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
 	integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
 	crossorigin="anonymous"></script>
@@ -55,28 +58,33 @@
 	left: 5%;
 	background-color: #e5e5e5;
 }
+
+	@media (max-width:768px) {
+		#homesubbox1{
+			width: 100% !important;
+		}
+		#homesubbox2{
+			width: 100% !important;
+		}
+	}
 </style>
 
 </head>
 <body>
 	<jsp:include page="/layouts/header.jsp" flush="true"/>
 	<main role="main">
-		<div
-			class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+		<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="margin: 0rem !important;">
 			<div class="col-md-5 p-lg-5 mx-auto my-5">
 				<h1 class="display-4 font-weight-normal">Welcome to Scotty's Store!</h1>
 				<p class="lead font-weight-normal">${sessionScope.userid}</p>
 				<a class="btn btn-outline-secondary" href="/archive">Read More</a>
 			</div>
 			<div class="product-device shadow-sm d-none d-md-block"></div>
-			<div
-				class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+			<div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
 		</div>
 
-		<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-			<div
-				class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden"
-				style="width: 50%;">
+		<div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3" style="padding-left: 0rem !important; margin-bottom: 0rem !important;">
+			<div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="width: 50%" id="homesubbox1">
 				<div class="my-3 py-3">
 					<h2 class="display-5">Phone</h2>
 					<p class="lead">Check out our newest phone!</p>
@@ -85,9 +93,7 @@
 					<div class="bg-light shadow-sm mx-auto" style="width: 80%; height: 300px; border-radius: 21px 21px 0 0;"></div>
 				</a>
 			</div>
-			<div
-				class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden"
-				style="width: 50%;">
+			<div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden" style="margin-right: 0rem !important;width: 50%"  id="homesubbox2">
 				<div class="my-3 p-3">
 					<h2 class="display-5">Accessories</h2>
 					<p class="lead">Check out other accessories!</p>

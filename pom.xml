@@ -9,11 +9,11 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.framework</groupId>
-	<artifactId>FrameworkMicroService</artifactId>
+	<artifactId>ViewerMicroService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>FrameworkMicroService</name>
-	<description>Micro Service Framework</description>
+	<name>ViewerMicroService</name>
+	<description>Viewer Micro Service Framework</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -85,6 +85,10 @@
 			<version>2.0.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

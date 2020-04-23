@@ -18,16 +18,19 @@
 	
 	<package name="default" extends="json-default">
 		<interceptors>
-			<interceptor name="log"
-				class="com.framework.controller.LoggingIntercept" />
+			<interceptor name="log" class="com.framework.controller.LoggingIntercept" />
 		</interceptors>
 
 	<!-- Home Page Mapping Begin -->	
 		<action name="/" class="com.framework.controller.HomeAction" method="HomepageAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
 			<result name="success">/Index.jsp</result>
 			<result name="error">/error/404page.jsp</result>
 		</action>	
 		<action name="" class="com.framework.controller.HomeAction" method="HomepageAction">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />		
 			<result name="success">/Index.jsp</result>
 			<result name="error">/error/404page.jsp</result>
 		</action>	
@@ -57,7 +60,6 @@
 		<action name="destroyAction" class="com.framework.controller.UserAction" method="Destroy">
 			<interceptor-ref name="defaultStack" />
 			<interceptor-ref name="log" />
-			<!-- <result name="success" type="json"></result> -->
 			<result name="success">/account/destroy/success.jsp</result>
 			<result name="error">/account/destroy/error.jsp</result> 
 		</action>
@@ -67,7 +69,9 @@
 			<result name="success">/account/update/success.jsp</result>
 			<result name="error">/account/update/error.jsp</result> 
 		</action>		
-		<action name="deleteUserSession" class="com.framework.controller.UserAction" method="DelUserCookie">		
+		<action name="deleteUserSession" class="com.framework.controller.UserAction" method="DelUserCookie">	
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />	
 			<result name="success">/Index.jsp</result>
 		</action>	
 		<action name="getUserSession" class="com.framework.controller.UserAction" method="UserSession">
@@ -83,11 +87,14 @@
 
 	<!-- Products Begin -->
 		<action name="checkProduct" class="com.framework.controller.ProductAction" method="checkProduct">
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
 			<result name="success">/product/Details.jsp</result>
 			<result name="error">/error/404page.jsp</result>
-			<!-- <result name="success" type="json"></result> -->
 		</action>
 		<action name="checkCategory" class="com.framework.controller.ProductAction" method="checkCategory">	
+			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="log" />
 			<result name="Phone">/product/Phone.jsp</result>
 			<result name="Accessories">/product/Accessories.jsp</result>
 			<result name="error">/error/404page.jsp</result>

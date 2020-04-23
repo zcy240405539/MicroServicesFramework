@@ -35,6 +35,7 @@
 					<div class="container" style="background-color:#f6f6f6 !important;border:1px #ddd solid;">
 						<p>Order Placed: ${orderTime}</p>
 						<p>Total Price: $${totalPrice}</p>
+						<p>Address: ${address}</p>
 						<p>Order# ${orderid}</p>
 					
 					</div>

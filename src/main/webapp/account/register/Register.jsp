@@ -69,6 +69,7 @@
 						<label for="emailTextBoxReg">Email address</label> 
 							<input type="email" class="form-control" id="emailTextBoxReg" name="userid"> 
 							<small id="emailHelpReg" class="form-text text-danger" style="display:none;"></small>
+							<small id="emailHelpReg2" class="form-text text-success" style="display:none;"></small>
 					</div>			
 					<div class="form-group">
 						<label for="passwordTextBoxReg">Password</label> 

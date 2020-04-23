@@ -8,6 +8,7 @@ public class OrdersEntityDTO {
 	String totalPrice; 
 	String orderTime;
 	String ip;
+	String address;
 	List<ItemsEntityDTO> item;
 	
 	public OrdersEntityDTO(){}
@@ -16,12 +17,13 @@ public class OrdersEntityDTO {
 		this.orderid = orderid;
 	}
 
-	public OrdersEntityDTO(String orderid, String userid, String totalPrice, String orderTime, String ip, List<ItemsEntityDTO> item){
+	public OrdersEntityDTO(String orderid, String userid, String totalPrice, String orderTime, String ip, String address, List<ItemsEntityDTO> item){
 		this.orderid = orderid;
 		this.userid = userid;
 		this.totalPrice = totalPrice;
 		this.orderTime = orderTime;
 		this.ip = ip;
+		this.address = address;
 		this.item = item;
 	}
 
@@ -63,6 +65,14 @@ public class OrdersEntityDTO {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public List<ItemsEntityDTO> getItem() {
